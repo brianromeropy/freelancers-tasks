@@ -98,7 +98,7 @@ git init
 git add .
 git commit -m "Estructura inicial: Laravel, Breeze, migración tasks, dashboard y contacto"
 git branch -M main
-git remote add origin https://github.com/TU_USUARIO/freelancers-tasks.git
+git remote add origin https://github.com/brianromeropy/freelancers-tasks.git
 git push -u origin main
 ```
 

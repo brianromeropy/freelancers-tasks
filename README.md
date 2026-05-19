@@ -1,5 +1,7 @@
 # FreelanceTasks
 
+**Repositorio:** [github.com/brianromeropy/freelancers-tasks](https://github.com/brianromeropy/freelancers-tasks)
+
 Plataforma web de gestión de tareas para **freelancers** (proyecto grupal — Desarrollo Web). Inspirada en un clon simplificado de Azure DevOps.
 
 ## Stack tecnológico
@@ -65,7 +67,7 @@ $php = "C:\xampp\php\php.exe"
 ### 1. Clonar el repositorio
 
 ```powershell
-git clone https://github.com/TU_ORGANIZACION/freelancers-tasks.git
+git clone https://github.com/brianromeropy/freelancers-tasks.git
 cd freelancers-tasks
 ```
 

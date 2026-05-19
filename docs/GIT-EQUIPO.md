@@ -14,7 +14,7 @@ Lo hace **una persona** del grupo (por ejemplo, el líder):
 2. Nombre sugerido: `freelancers-tasks` (o el que acuerden).
 3. **No** marcar "Add a README" si ya tienen código local (evita conflictos).
 4. Crear el repo y copiar la URL, por ejemplo:  
-   `https://github.com/mi-grupo/freelancers-tasks.git`
+   `https://github.com/brianromeropy/freelancers-tasks.git`
 
 ### En la PC de quien tiene el proyecto listo
 
@@ -27,7 +27,7 @@ git init
 git add .
 git commit -m "Initial commit: Laravel, Breeze, migración tasks, dashboard y contacto"
 git branch -M main
-git remote add origin https://github.com/mi-grupo/freelancers-tasks.git
+git remote add origin https://github.com/brianromeropy/freelancers-tasks.git
 git push -u origin main
 ```
 
@@ -69,7 +69,7 @@ Esto ya está configurado en `.gitignore`.
 # Elegir carpeta de trabajo
 cd C:\Users\TU_USUARIO\Documents
 
-git clone https://github.com/mi-grupo/freelancers-tasks.git
+git clone https://github.com/brianromeropy/freelancers-tasks.git
 cd freelancers-tasks
 ```
 
