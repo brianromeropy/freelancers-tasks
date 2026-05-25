@@ -2,100 +2,183 @@
 
 **Repositorio:** [github.com/brianromeropy/freelancers-tasks](https://github.com/brianromeropy/freelancers-tasks)
 
-Plataforma web de gestión de tareas para **freelancers** (proyecto grupal — Desarrollo Web). Inspirada en un clon simplificado de Azure DevOps.
+Plataforma web para **freelancers** que organizan su trabajo por **proyectos** y **tareas** en un tablero tipo Kanban. Proyecto grupal de **Desarrollo Web** — Ingeniería Informática, Universidad Americana (2026).
+
+---
+
+## Integrantes del equipo
+
+| Nombre | Apellido para login | Presentación individual |
+|--------|---------------------|-------------------------|
+| Brian Romero | `Romero` | Sí |
+| Junior Ortiz | `Ortiz` | Sí |
+| Rodney Melgarejo | `Melgarejo` | Sí |
+| Gaston Pereira | `Pereira` | Sí |
+
+Cada integrante tiene su propia cuenta, proyectos y tareas en la base de datos. El footer y la página **Contáctenos** muestran los datos del usuario que inició sesión.
+
+---
 
 ## Stack tecnológico
 
 | Capa | Tecnología |
 |------|------------|
-| Backend / Frontend | Laravel 9 + Blade |
+| Backend | Laravel 9 |
+| Vistas | Blade |
 | Estilos | Tailwind CSS 3 + Vite |
-| Autenticación | Laravel Breeze (login / registro) |
+| Autenticación | Laravel Breeze (login por apellido) |
 | Base de datos | MySQL |
+| Idioma de la app | Español (`APP_LOCALE=es`) |
 | Control de versiones | Git + GitHub |
 
 ---
 
-## Qué está hecho (estado actual)
+## Qué hace el sistema (paso a paso)
 
-### Completado
+Esta es la secuencia que debe mostrar cada integrante en su video de sustentación o en la demo en clase.
 
-- Proyecto Laravel 9 configurado.
-- **Laravel Breeze**: login, registro, logout (`/login`, `/register`).
-- **MySQL**: base `freelancers_tasks` (cada dev la crea en su máquina).
-- **Migración `tasks`**: título, descripción, estado (`todo`, `in_progress`, `done`), prioridad (`baja`, `media`, `alta`), relación con `users`.
-- Modelos `User` y `Task` con relación uno-a-muchos.
-- **Dashboard** (`/dashboard`): integrantes, descripción del proyecto, diseño (colores, Roboto, logo), 3 funcionalidades propuestas.
-- **Contáctenos** (`/contacto`): mismo layout, formulario maquetado, sección del alumno presentador.
-- Layout común con cabecera (azul / gris oscuro) y navegación.
+### Paso 1 — Abrir la aplicación
 
-### Pendiente (para el equipo)
+1. En la PC, tener **MySQL** y **dos terminales** activas (`npm run dev` y `php artisan serve`).
+2. Abrir el navegador en: **http://127.0.0.1:8000**
+3. La raíz `/` redirige al dashboard; si no hay sesión, Laravel envía al **login**.
 
-- [ ] Completar nombres en `resources/views/dashboard.blade.php`.
-- [ ] Completar datos en `resources/views/contacto.blade.php` + imagen en `public/images/`.
-- [ ] CRUD de tareas y tablero Kanban (funcionalidades propuestas).
-- [ ] Envío real del formulario de contacto (opcional).
-- [ ] Subir repositorio a GitHub y enlazar a todos los integrantes.
+### Paso 2 — Iniciar sesión (examen: por apellido)
+
+1. Ir a **http://127.0.0.1:8000/login**
+2. Ingresar solo el **apellido** (no el nombre completo) y la contraseña demo del grupo.
+3. El sistema busca en la tabla `users` un nombre que **termine** con ese apellido (por ejemplo `Brian Romero` + apellido `Romero`).
+4. Si las credenciales son correctas, redirige a **`/dashboard`**.
+
+**Contraseña demo para los 4 usuarios del seeder:** `freelancers2026`
+
+| Integrante | Campo *Apellido* en login |
+|------------|---------------------------|
+| Brian Romero | `Romero` |
+| Junior Ortiz | `Ortiz` |
+| Rodney Melgarejo | `Melgarejo` |
+| Gaston Pereira | `Pereira` |
+
+> No hace falta registrarse manualmente si ejecutaron `php artisan db:seed` (ver instalación).
+
+### Paso 3 — Dashboard (página de inicio)
+
+En **`/dashboard`** el usuario autenticado ve:
+
+1. **Cabecera del sitio** — Logo FT, menú *Inicio*, *Contáctenos*, nombre del usuario y *Cerrar sesión*.
+2. **Banner / hero** — Presentación visual del producto FreelanceTasks.
+3. **Equipo del proyecto** — Brian, Junior, Rodney y Gaston (información grupal).
+4. **Descripción y diseño** — Colores, tipografía Roboto, objetivo del sistema.
+5. **Funcionalidades** — Resumen de lo implementado (proyectos, tareas, Kanban, etc.).
+6. **Mis proyectos** — Lista de proyectos **solo del usuario logueado**; se puede crear uno nuevo.
+7. **Nueva tarea** — Formulario para agregar tareas al proyecto activo (título, descripción, estado, prioridad).
+8. **Tablero Kanban** — Tres columnas según el estado de cada tarea del proyecto seleccionado:
+   - **Pendiente**
+   - **En progreso**
+   - **Finalizado**
+
+Cada tarjeta de tarea permite **cambiar de columna** (actualizar estado) o **eliminar** la tarea.
+
+### Paso 4 — Modelo de datos en la práctica
+
+El flujo de negocio implementado es:
+
+```
+Usuario → Proyecto(s) → Tarea(s) → Estado (pendiente | en_progreso | finalizado)
+```
+
+- Un **proyecto** agrupa las tareas de un cliente o encargo (ejemplo del seeder: *Freelance Tracker Lite*).
+- Cada **tarea** tiene título, descripción, **prioridad** (`baja`, `media`, `alta`) y **estado**.
+- En el dashboard se filtra por proyecto con `?project=id` en la URL.
+- Los datos **no se comparten** entre integrantes: cada uno ve únicamente sus proyectos y tareas (`user_id`).
+
+### Paso 5 — Contáctenos (presentación individual)
+
+1. Ir a **http://127.0.0.1:8000/contacto** (requiere sesión).
+2. Se muestra el **formulario de contacto** (maquetado; el envío por correo queda para una fase futura).
+3. La sección **Alumno presentador** y el **footer** de todas las páginas usan el perfil del usuario logueado.
+4. Los textos personalizados (nombre completo, correo, teléfono) se editan en un solo archivo: **`config/presenters.php`** (clave = email del usuario en la BD).
+
+### Paso 6 — Cerrar sesión
+
+Desde el menú superior → **Cerrar sesión** → vuelve al login.
 
 ---
 
-## Requisitos en cada PC
+## Instalación en tu computadora (guía para el equipo)
+
+Sigue estos pasos **en orden** la primera vez. Si ya clonaste antes, después de un `git pull` suele bastar con los pasos de la sección *Actualizar el proyecto*.
+
+### Requisitos previos
 
 Instalar **antes** de clonar:
 
-| Herramienta | Versión recomendada | Notas |
-|-------------|---------------------|--------|
-| PHP | 8.0+ (ideal 8.1+) | XAMPP, Laragon o PHP standalone |
+| Herramienta | Versión | Dónde obtenerla |
+|-------------|---------|-----------------|
+| PHP | 8.0+ (recomendado 8.1+) | [XAMPP](https://www.apachefriends.org/) o Laragon |
 | Composer | 2.x | [getcomposer.org](https://getcomposer.org/) |
-| Node.js | 18+ | Incluye `npm` |
-| MySQL | 5.7+ / 8.x | XAMPP: iniciar Apache + MySQL |
-| Git | Cualquier reciente | [git-scm.com](https://git-scm.com/) |
+| Node.js | 18+ (incluye npm) | [nodejs.org](https://nodejs.org/) |
+| MySQL | 5.7+ / 8.x | Viene con XAMPP |
+| Git | Reciente | [git-scm.com](https://git-scm.com/) |
 
-### Windows + XAMPP (ejemplo)
+**En XAMPP:** abrir el panel de control e **iniciar Apache y MySQL** antes de migrar o usar la app.
 
-Si `php` y `composer` no están en el PATH:
+#### Windows: si `php` no se reconoce en PowerShell
+
+Usar la ruta completa de XAMPP en todos los comandos `php artisan`:
 
 ```powershell
 $php = "C:\xampp\php\php.exe"
-# Composer: usar composer global o composer.phar en la carpeta del proyecto
 ```
+
+Ejemplo: `& $php artisan migrate` en lugar de `php artisan migrate`.
 
 ---
 
-## Instalación rápida (compañeros que clonan el repo)
-
-### 1. Clonar el repositorio
+### Paso A — Clonar el repositorio
 
 ```powershell
 git clone https://github.com/brianromeropy/freelancers-tasks.git
 cd freelancers-tasks
 ```
 
-> Sustituir la URL por la del repositorio real del grupo.
+> Si el nombre de la carpeta local es `freelancers`, entrar a esa carpeta en los siguientes pasos.
 
-### 2. Dependencias PHP
+---
+
+### Paso B — Dependencias de PHP
 
 ```powershell
 composer install
 ```
 
-Si falla por versión de PHP en Windows con XAMPP antiguo:
+Si Composer se queja por la versión de PHP en Windows:
 
 ```powershell
 composer install --ignore-platform-reqs
 ```
 
-### 3. Archivo de entorno
+---
+
+### Paso C — Archivo de entorno
 
 ```powershell
 copy .env.example .env
 php artisan key:generate
 ```
 
-Editar `.env` (no se sube a Git):
+En Windows con variable `$php`:
+
+```powershell
+copy .env.example .env
+& $php artisan key:generate
+```
+
+Editar **`.env`** (este archivo **no** se sube a Git). Valores mínimos:
 
 ```env
 APP_NAME=FreelanceTasks
+APP_LOCALE=es
 APP_URL=http://127.0.0.1:8000
 
 DB_CONNECTION=mysql
@@ -106,147 +189,199 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-### 4. Base de datos
+`DB_PASSWORD` vacío es lo habitual en XAMPP con usuario `root`. Si tu MySQL tiene contraseña, colócala ahí.
 
-1. Abrir **phpMyAdmin** (o MySQL Workbench).
-2. Crear la base: `freelancers_tasks`.
-3. Ejecutar migraciones:
+---
+
+### Paso D — Crear la base de datos
+
+1. Abrir **phpMyAdmin**: http://localhost/phpmyadmin
+2. Crear una base nueva llamada exactamente: **`freelancers_tasks`**
+3. Cotejamiento: `utf8mb4_unicode_ci` (por defecto en MySQL 8)
+
+---
+
+### Paso E — Tablas y datos de demostración
+
+**Primera instalación** (crea tablas + 4 usuarios + proyectos + tareas demo):
 
 ```powershell
-php artisan migrate
+php artisan migrate --force
+php artisan db:seed --force
 ```
 
-### 5. Dependencias frontend
+Para **reiniciar todo** desde cero (borra datos anteriores):
+
+```powershell
+php artisan migrate:fresh --seed --force
+```
+
+Con XAMPP:
+
+```powershell
+& $php artisan migrate --force
+& $php artisan db:seed --force
+```
+
+---
+
+### Paso F — Dependencias del frontend (Tailwind / Vite)
 
 ```powershell
 npm install
 ```
 
-### 6. Levantar el proyecto (dos terminales)
+---
 
-**Terminal 1 — assets (Tailwind / Vite):**
+### Paso G — Levantar el proyecto (dos terminales abiertas)
+
+**Terminal 1** — compila CSS/JS en caliente (dejar corriendo):
 
 ```powershell
 npm run dev
 ```
 
-**Terminal 2 — servidor Laravel:**
+**Terminal 2** — servidor Laravel:
 
 ```powershell
 php artisan serve
 ```
 
-Abrir en el navegador: **http://127.0.0.1:8000**
+Abrir: **http://127.0.0.1:8000/login** → apellido + `freelancers2026` → dashboard.
 
-### 7. Primera cuenta
-
-Ir a **http://127.0.0.1:8000/register**, crear un usuario y luego entrar a `/dashboard`.
-
----
-
-## Problemas frecuentes al compilar
-
-| Problema | Solución |
-|----------|----------|
-| Página sin estilos | Dejar corriendo `npm run dev` o ejecutar `npm run build` |
-| `Vite manifest not found` | `npm run build` o iniciar `npm run dev` |
-| Error de conexión MySQL | Verificar que MySQL esté activo y que `.env` tenga `DB_DATABASE=freelancers_tasks` |
-| Base no existe | Crear `freelancers_tasks` en phpMyAdmin |
-| `php` / `composer` no reconocido | Usar ruta completa de XAMPP o agregar al PATH |
-| 419 / CSRF al login | Borrar cookies, revisar que `APP_URL` coincida con la URL del navegador |
-| Tras `git pull`, errores raras | `composer install` + `npm install` + `php artisan migrate` |
-
----
-
-## Trabajo en equipo con Git
-
-Ver guía detallada: **[docs/GIT-EQUIPO.md](docs/GIT-EQUIPO.md)**
-
-Resumen:
-
-```powershell
-# Antes de empezar a programar
-git pull origin main
-
-# Al terminar una tarea
-git add .
-git commit -m "Descripción clara del cambio"
-git push origin main
-```
-
-**Reglas del grupo**
-
-- No subir `.env` (contiene contraseñas locales).
-- No subir `vendor/` ni `node_modules/` (se regeneran con `composer install` y `npm install`).
-- Hacer `pull` antes de `push` para evitar conflictos.
-- Mensajes de commit claros: `feat: tablero kanban`, `fix: login redirect`, etc.
-
----
-
-## Estructura del proyecto
-
-```
-freelancers/
-├── app/
-│   ├── Http/Controllers/
-│   │   ├── Auth/              # Login, registro (Breeze)
-│   │   ├── DashboardController.php
-│   │   └── ContactController.php
-│   └── Models/
-│       ├── User.php
-│       └── Task.php
-├── database/migrations/
-│   └── 2026_05_19_000001_create_tasks_table.php
-├── resources/views/
-│   ├── layouts/app.blade.php  # Cabecera común
-│   ├── dashboard.blade.php
-│   ├── contacto.blade.php
-│   └── auth/                  # Vistas de login
-├── routes/
-│   ├── web.php                # Dashboard, contacto
-│   └── auth.php               # Rutas Breeze
-├── .env.example               # Plantilla (copiar a .env)
-├── SETUP.md                   # Guía extendida de instalación
-└── docs/GIT-EQUIPO.md         # Flujo Git para el grupo
-```
-
----
-
-## Rutas principales
-
-| URL | Descripción | Auth |
-|-----|-------------|------|
-| `/` | Redirige al dashboard | Sí |
-| `/login` | Iniciar sesión | No |
-| `/register` | Registrarse | No |
-| `/dashboard` | Página de inicio (examen) | Sí |
-| `/contacto` | Formulario de contacto | Sí |
-
----
-
-## Entrega / producción
-
-Para demo sin `npm run dev`:
+#### Demo sin `npm run dev` (opcional)
 
 ```powershell
 npm run build
 php artisan serve
 ```
 
-Los archivos compilados quedan en `public/build/`.
+---
+
+### Paso H — Personalizar tu presentación individual
+
+1. **Login** — Usa tu apellido de la tabla de integrantes (arriba).
+2. **Contáctenos y footer** — Edita solo tu bloque en `config/presenters.php` (correo y teléfono reales si el profe lo pide).
+3. **No edites** `contacto.blade.php` ni el footer en `layouts/app.blade.php` para cambiar el nombre: ya es dinámico.
 
 ---
 
-## Integrantes
+## Actualizar el proyecto (después de `git pull`)
 
-| Nombre | Rol | Contacto |
-|--------|-----|----------|
-| [Completar] | Líder / Backend | |
-| [Completar] | Frontend / Diseño | |
-| [Completar] | Base de datos / QA | |
+```powershell
+git pull origin main
+composer install
+npm install
+php artisan migrate --force
+```
+
+Si Brian subió cambios al seeder o quieren datos demo limpios:
+
+```powershell
+php artisan db:seed --force
+```
+
+Reiniciar las dos terminales (`npm run dev` y `php artisan serve`).
+
+---
+
+## Problemas frecuentes
+
+| Problema | Qué hacer |
+|----------|-----------|
+| Página sin estilos / fea | Dejar `npm run dev` corriendo o ejecutar `npm run build` |
+| `Vite manifest not found` | `npm run dev` o `npm run build` |
+| Error SQL / conexión rechazada | Verificar MySQL en XAMPP y valores de `.env` |
+| Base no existe | Crear `freelancers_tasks` en phpMyAdmin |
+| `php` o `composer` no reconocido | Usar `C:\xampp\php\php.exe` y ruta a `composer.phar` |
+| Login: apellido incorrecto | Usar solo apellido (`Romero`, no `Brian Romero`) |
+| Login: contraseña incorrecta | `freelancers2026` tras `db:seed` |
+| 419 al enviar formularios | `APP_URL` debe coincidir con la URL del navegador |
+| No aparecen proyectos/tareas | `php artisan db:seed --force` |
+
+---
+
+## Rutas principales
+
+| URL | Descripción | ¿Requiere login? |
+|-----|-------------|------------------|
+| `/` | Redirige al dashboard | Sí |
+| `/login` | Inicio de sesión por apellido | No |
+| `/register` | Registro Breeze (opcional) | No |
+| `/dashboard` | Inicio, proyectos, Kanban | Sí |
+| `/contacto` | Formulario y datos del presentador | Sí |
+| `POST /projects` | Crear proyecto | Sí |
+| `POST /tasks` | Crear tarea | Sí |
+| `PATCH /tasks/{id}` | Cambiar estado / datos | Sí |
+| `DELETE /tasks/{id}` | Eliminar tarea | Sí |
+
+---
+
+## Estructura del proyecto (resumen)
+
+```
+freelancers/
+├── app/
+│   ├── Http/Controllers/
+│   │   ├── Auth/                 # Login Breeze (apellido)
+│   │   ├── DashboardController.php
+│   │   ├── ContactController.php
+│   │   ├── ProjectController.php
+│   │   └── TaskController.php
+│   ├── Http/Requests/Auth/LoginRequest.php
+│   └── Models/
+│       ├── User.php              # presenterProfile()
+│       ├── Project.php
+│       └── Task.php
+├── config/
+│   └── presenters.php            # Datos individuales footer + contacto
+├── database/
+│   ├── migrations/               # users, tasks, projects, ...
+│   └── seeders/DatabaseSeeder.php  # 4 integrantes + demo
+├── resources/views/
+│   ├── layouts/app.blade.php
+│   ├── dashboard.blade.php
+│   ├── contacto.blade.php
+│   ├── components/task-card.blade.php
+│   └── auth/login.blade.php
+├── routes/web.php
+├── lang/es/                      # Traducciones
+├── SETUP.md                      # Guía extendida (PHP 8.1+, Breeze)
+└── docs/GIT-EQUIPO.md            # Flujo Git del grupo
+```
+
+---
+
+## Trabajo en equipo con Git
+
+Guía detallada: **[docs/GIT-EQUIPO.md](docs/GIT-EQUIPO.md)**
+
+```powershell
+git pull origin main
+# ... trabajar ...
+git add .
+git commit -m "feat: descripción clara del cambio"
+git push origin main
+```
+
+**No subir a Git:** `.env`, `vendor/`, `node_modules/`, `public/hot`.
+
+---
+
+## Estado del proyecto y fases futuras
+
+| Funcionalidad | Estado |
+|---------------|--------|
+| Login por apellido + dashboard | Listo |
+| Proyectos y tareas por usuario | Listo |
+| Kanban (3 estados) | Listo |
+| Contáctenos + footer por usuario logueado | Listo |
+| Seeder con 4 cuentas individuales | Listo |
+| Envío real del formulario de contacto | Pendiente |
+| Control de tiempos / horas | Próxima fase |
 
 ---
 
 ## Licencia y uso académico
 
-Proyecto educativo — facultad. Uso acorde a las normas del curso.
+Proyecto educativo — facultad. Uso acorde a las normas del curso de Desarrollo Web.

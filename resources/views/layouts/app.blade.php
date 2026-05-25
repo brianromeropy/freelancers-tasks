@@ -58,8 +58,10 @@
         @yield('content')
     </main>
 
-    <footer class="mt-12 border-t border-slate-200 bg-white py-6 text-center text-sm text-slate-500">
-        <p>&copy; {{ date('Y') }} FreelanceTasks — Proyecto académico. Todos los derechos reservados.</p>
+    <footer class="mt-12 border-t border-slate-200 bg-white py-6 text-center">
+        <p class="text-sm font-normal tracking-wide text-slate-600">
+            &copy; 2026 FreelanceTasks — {{ $presenter['footer_name'] }} — {{ $presenter['career'] }}
+        </p>
     </footer>
 </body>
 </html>

@@ -1,47 +1,51 @@
 <x-guest-layout>
-    <!-- Session Status -->
+    <div class="mb-6 text-center">
+        <h1 class="text-xl font-bold text-slate-900">Iniciar sesión</h1>
+        <p class="mt-1.5 text-sm text-slate-500">
+            Accede con tu apellido y contraseña del equipo
+        </p>
+    </div>
+
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
     <form method="POST" action="{{ route('login') }}">
         @csrf
 
-        <!-- Email Address -->
         <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <x-input-label for="apellido" value="Apellido"
+                           class="text-slate-700 font-medium" />
+            <x-text-input id="apellido"
+                          class="block mt-1.5 w-full rounded-lg border-slate-200 bg-slate-50/80 px-4 py-2.5 text-slate-900 shadow-inner placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200/60 focus:bg-white transition"
+                          type="text"
+                          name="apellido"
+                          :value="old('apellido')"
+                          required
+                          autofocus
+                          autocomplete="family-name"
+                          placeholder="Ej: Romero" />
+            <x-input-error :messages="$errors->get('apellido')" class="mt-2" />
         </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+        <div class="mt-5">
+            <x-input-label for="password" :value="__('Password')"
+                           class="text-slate-700 font-medium" />
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
+            <x-text-input id="password"
+                          class="block mt-1.5 w-full rounded-lg border-slate-200 bg-slate-50/80 px-4 py-2.5 text-slate-900 shadow-inner placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-200/60 focus:bg-white transition"
+                          type="password"
+                          name="password"
+                          required
+                          autocomplete="current-password"
+                          placeholder="••••••••" />
 
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" name="remember">
-                <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
-            </label>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-
-            <x-primary-button class="ml-3">
+        <div class="mt-8">
+            <button type="submit"
+                    class="inline-flex w-full items-center justify-center rounded-lg border border-transparent bg-[#0f172a] px-4 py-3 text-sm font-semibold uppercase tracking-wider text-white shadow-md shadow-slate-900/20 transition duration-200 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 active:bg-slate-950">
                 {{ __('Log in') }}
-            </x-primary-button>
+            </button>
         </div>
     </form>
 </x-guest-layout>

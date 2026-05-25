@@ -47,4 +47,34 @@ class User extends Authenticatable
     {
         return $this->hasMany(Task::class);
     }
+
+    public function projects(): HasMany
+    {
+        return $this->hasMany(Project::class);
+    }
+
+    /**
+     * Datos de presentación individual (footer, Contáctenos).
+     *
+     * @return array{full_name: string, footer_name: string, career: string, contact_email: string, phone: string}
+     */
+    public function presenterProfile(): array
+    {
+        $profiles = config('presenters.profiles', []);
+        $profile = $profiles[$this->email] ?? null;
+
+        if ($profile !== null) {
+            return $profile;
+        }
+
+        $default = config('presenters.default', []);
+
+        return [
+            'full_name' => $this->name,
+            'footer_name' => $this->name,
+            'career' => $default['career'] ?? 'Ingeniería Informática',
+            'contact_email' => $this->email,
+            'phone' => $default['phone'] ?? '',
+        ];
+    }
 }

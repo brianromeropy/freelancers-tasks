@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +25,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        View::composer(['layouts.app', 'contacto'], function ($view) {
+            $user = Auth::user();
+            $presenter = $user
+                ? $user->presenterProfile()
+                : config('presenters.default');
+
+            $view->with('presenter', $presenter);
+        });
     }
 }
