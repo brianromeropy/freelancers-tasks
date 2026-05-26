@@ -7,10 +7,16 @@
         <div class="grid gap-0 lg:grid-cols-2">
             <div class="bg-gradient-to-r from-slate-900 to-blue-900 p-8 text-white flex flex-col justify-center">
                 <h1 class="text-3xl font-bold mb-2">Panel de inicio</h1>
-                <p class="text-slate-300">
+                <p class="text-slate-300 mb-6">
                     Bienvenido a <strong>FreelanceTasks</strong>, una plataforma inspirada en herramientas como Kanban DevOps,
                     orientada a freelancers que necesitan organizar su trabajo de forma ágil y visual.
                 </p>
+                <div>
+                    <a href="https://freelancerstasksua.blogspot.com/?presentador={{ urlencode($presenter['full_name'] ?? auth()->user()->name) }}" target="_blank" class="inline-flex items-center gap-2 rounded-lg bg-blue-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-400 transition shadow-md">
+                        Novedades y Noticias (Blog)
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                    </a>
+                </div>
             </div>
             <div class="relative min-h-[220px] overflow-hidden border-l border-slate-200 bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100">
                 <div class="absolute inset-0 opacity-40">

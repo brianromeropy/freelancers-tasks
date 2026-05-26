@@ -35,6 +35,11 @@
                    class="{{ request()->routeIs('contacto') ? 'text-blue-400' : 'text-slate-300 hover:text-white' }} transition">
                     Contáctenos
                 </a>
+                <a href="https://freelancerstasksua.blogspot.com/{{ auth()->check() ? '?presentador=' . urlencode($presenter['full_name'] ?? auth()->user()->name) : '' }}" target="_blank"
+                   class="text-slate-300 hover:text-white transition flex items-center gap-1">
+                    Blog
+                    <svg class="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                </a>
                 @auth
                     <span class="hidden sm:inline text-slate-400">|</span>
                     <span class="hidden sm:inline text-slate-300">{{ Auth::user()->name }}</span>
